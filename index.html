@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PIK M KJN - Unit Kegiatan Mahasiswa</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/music.css" />
+
+  </head>
+  <body>
+    <!-- Canvas untuk Bintang & Efek Mouse -->
+    <canvas id="starCanvas"></canvas>
+
+    <!-- Navbar -->
+    <nav id="navbar">
+      <div class="nav-container">
+        <a href="#" class="logo">
+          <img
+            src="assets/img/logo.png"
+            alt="Logo PIK M KJN"
+            class="logo-image"
+          />
+          <!-- <i class="fas fa-star"></i> -->
+          <h1>PIK-M <br>
+            <span class="highlight">Kula Jana Nuraga</span>
+        </h1>
+        </a>
+        <ul class="nav-links">
+          <li><a href="#beranda">Beranda</a></li>
+          <li><a href="#tentang">Tentang PIK M</a></li>
+          <li><a href="#kegiatan">Dokumentasi</a></li>
+          <li><a href="#pendaftaran">Pendaftaran</a></li>
+          <li><a href="#kontak">Contact Us</a></li>
+        </ul>
+        <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="beranda">
+      <div class="hero-content">
+        <h1>
+          Unit Kegiatan Mahasiswa<br />Pusat Informasi Konseling Mahasiswa
+        </h1>
+        <p class="subtitle">PIK-M Kula Jana Nuraga</p>
+        <p class="description">
+          Wadah pengembangan diri mahasiswa dalam bidang konseling, informasi,
+          dan kepemimpinan. Bergabunglah bersama kami untuk menciptakan generasi
+          yang lebih baik.
+        </p>
+        <a href="#pendaftaran" class="btn-primary">Daftar Sekarang</a>
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about" id="tentang">
+      <div class="container">
+        <h2 class="section-title">Tentang PIK M KJN</h2>
+        <p class="section-subtitle">
+          Mengenal lebih dekat Unit Kegiatan Mahasiswa kami
+        </p>
+
+        <div class="about-content fade-in">
+          <div class="about-text">
+            <h3>Apa itu PIK M?</h3>
+            <p>
+              Selama 17 tahun, PIK M UNHI telah menjadi wadah bagi mahasiswa
+              Universitas Hindu Indonesia yang ingin berkembang — tidak hanya
+              secara akademik, tetapi juga secara emosional dan sosial. Kami
+              hadir sebagai teman curhat dan solusi atas permasalahan mahasiswa
+              selama menjalani perkuliahan, dengan visi menciptakan lingkungan
+              kampus yang peduli, informatif, dan suportif.
+            </p>
+            <p>
+              Dibina oleh Putu Lakustini Cahyaningrum, S.Si., M.Si. dan Ni Luh
+              Gede Sudaryati, S.Si., M.Si., serta dipimpin oleh Gita Prajnya
+              Paramitha, PIK M terus membuktikan bahwa kepedulian bisa mengubah
+              dunia. Kami percaya bahwa kesehatan mental dan informasi yang
+              tepat adalah kunci kesuksesan akademik dan pribadi setiap
+              mahasiswa.
+            </p>
+            <p>
+              Dari Duta Denpasar hingga berbagai ajang nasional, para duta genre
+              PIK M telah membawa nama UNHI ke kancah yang lebih besar dan
+              pulang membawa prestasi gemilang. Sekarang, giliranmu untuk
+              menjadi bagian dari legenda ini, mengasah skill konseling,
+              kepemimpinan, dan public speaking bersama komunitas yang supportif
+            </p>
+          </div>
+          <div class="about-image fade-in">
+            <img src="assets/img/latar.webp" alt="Kegiatan Mahasiswa" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Activities / Dokumentasi Section -->
+    <section class="activities" id="kegiatan">
+      <div class="container">
+        <h2 class="section-title">Dokumentasi Kegiatan</h2>
+        <p class="section-subtitle">
+          Momen-momen berharga perjalanan PIK M KJN
+        </p>
+
+        <div class="carousel-container fade-in">
+          <button class="carousel-btn prev" onclick="moveCarousel(-1)">
+            <i class="fas fa-chevron-left"></i>
+          </button>
+
+          <div class="carousel-track" id="carouselTrack"></div>
+
+          <button class="carousel-btn next" onclick="moveCarousel(1)">
+            <i class="fas fa-chevron-right"></i>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Registration Section -->
+    <section class="registration" id="pendaftaran">
+      <div class="container">
+        <h2 class="section-title">Pendaftaran Anggota</h2>
+        <p class="section-subtitle">
+          Isi formulir di bawah untuk bergabung dengan PIK M KJN
+        </p>
+
+        <div class="form-container fade-in">
+          <div id="alertBox" class="alert"></div>
+
+          <form id="registrationForm">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="nama">Nama Lengkap</label>
+                <input
+                  type="text"
+                  id="nama"
+                  name="nama"
+                  required
+                  placeholder="Masukkan nama lengkap"
+                />
+              </div>
+              <div class="form-group">
+                <label for="nim">NIM</label>
+                <input
+                  type="text"
+                  id="nim"
+                  name="nim"
+                  required
+                  placeholder="Contoh: 210101001"
+                />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="divisi">Divisi</label>
+                <select id="divisi" name="divisi" required>
+                  <option value="">Pilih Divisi</option>
+                  <option value="1">Divisi Acara</option>
+                  <option value="2">Divisi Humas</option>
+                  <option value="3">Divisi Pubdok</option>
+                  <option value="4">Divisi PSKS</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="prodi">Program Studi</label>
+                <input
+                  type="text"
+                  id="prodi"
+                  name="prodi"
+                  required
+                  placeholder="Contoh: Sistem Informasi"
+                />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="semester">Semester</label>
+                <select id="semester" name="semester" required>
+                  <option value="">Pilih Semester</option>
+                  <option value="1">Semester 1</option>
+                  <option value="2">Semester 2</option>
+                  <option value="3">Semester 3</option>
+                  <option value="4">Semester 4</option>
+                  <option value="5">Semester 5</option>
+                  <option value="6">Semester 6</option>
+                  <option value="7">Semester 7</option>
+                  <option value="8">Semester 8</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="noHp">No. WhatsApp</label>
+                <input
+                  type="tel"
+                  id="noHp"
+                  name="noHp"
+                  required
+                  placeholder="Contoh: 08123456789"
+                />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="alasan">Alasan Bergabung</label>
+              <textarea
+                id="alasan"
+                name="alasan"
+                rows="4"
+                required
+                placeholder="Ceritakan alasanmu ingin bergabung dengan PIK M KJN..."
+              ></textarea>
+            </div>
+
+            <button type="submit" class="submit-btn" id="submitBtn">
+              Kirim Pendaftaran
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact" id="kontak">
+      <div class="container">
+        <h2 class="section-title">Contact Us</h2>
+        <p class="section-subtitle">
+          Hubungi kami untuk informasi lebih lanjut
+        </p>
+
+        <div class="contact-grid fade-in">
+          <a
+            href="https://wa.me/6281249359707"
+            target="_blank"
+            class="contact-card wa-card"
+          >
+            <i class="fab fa-whatsapp"></i>
+            <h3>WhatsApp</h3>
+            <p>+62 812-4935-9707</p>
+            <p
+              style="margin-top: 0.5rem; font-size: 0.8rem; color: var(--gold)"
+            >
+              Klik untuk chat langsung
+            </p>
+          </a>
+
+          <a
+            href="https://www.instagram.com/ukmpikunhi/"
+            target="_blank"
+            class="contact-card ig-card"
+          >
+            <i class="fab fa-instagram"></i>
+            <h3>Instagram</h3>
+            <p>@ukmpikunhi</p>
+            <p
+              style="margin-top: 0.5rem; font-size: 0.8rem; color: var(--gold)"
+            >
+              Klik untuk lihat profil
+            </p>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <p>
+        PIK M KJN - Universitas Hindu Indonesia &copy; 2026. All rights reserved.
+        <i class="fas fa-heart heart"></i> oleh PUBDOK PIK-M
+      </p>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script src="js/activities.js"></script>
+    <script src="js/music.js"></script>
+  </body>
+</html>

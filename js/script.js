@@ -302,7 +302,7 @@ document
       // Tampilkan pesan sukses (karena no-cors, kita anggap sukses jika tidak error)
       alertBox.className = "alert success";
       alertBox.textContent =
-        "Pendaftaran berhasil! Data telah masuk ke spreadsheet. Kami akan menghubungi Anda segera.";
+        "Pendaftaran berhasil! Data kamu 😘 telah dikirim. Kami akan menghubungi kamu segera.";
       this.reset();
     } catch (error) {
       // Fallback: tampilkan data yang bisa di-copy

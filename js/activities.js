@@ -1,27 +1,27 @@
 const activities = [
   {
     image: "assets/img/img-aktivitas/1.webp",
-    title: "Seminar Kesehatan Mental",
+    title: "PEMILIHAN DUTA GENRE UNHI DI LIVING WORLD DENPASAR",
     description:
-      "Kegiatan seminar tentang pentingnya kesehatan mental bagi mahasiswa dengan pembicara profesional.",
+      "Kegiatan pemilihan Duta Genre UNHI yang berlangsung di Living World Denpasar.",
   },
   {
     image: "assets/img/img-aktivitas/2.webp",
-    title: "Bakti Sosial",
+    title: "SERAH TERIMA JABATAN PIK M",
     description:
-      "Kegiatan pengabdian masyarakat yang dilakukan oleh anggota PIK M untuk memberikan dampak positif.",
+      "Kegiatan serah terima jabatan untuk menjamin kelancaran operasional organisasi.",
   },
-  {
+  { 
     image: "assets/img/img-aktivitas/3.webp",
-    title: "Workshop Leadership",
+    title: "BAKTI SOSIAL UKM PIK-M UNHI",
     description:
-      "Pelatihan kepemimpinan untuk meningkatkan soft skill dan kemampuan organisasi mahasiswa.",
+      "Kegiatan bakti sosial yang dilakukan oleh UKM PIK-M UNHI untuk memberikan kontribusi positif kepada masyarakat.",
   },
   {
     image: "assets/img/img-aktivitas/4.webp",
-    title: "Team Building",
+    title: "PEMBEKALAN CALON DUTA GENRE UNHI",
     description:
-      "Kegiatan memperkuat ikatan antar anggota melalui berbagai aktivitas seru dan menantang.",
+      "Kegiatan pembekalan calon Duta Genre UNHI untuk mempersiapkan mereka dalam menjalankan tugas dan tanggung jawab sebagai duta.",
   },
 ];
 

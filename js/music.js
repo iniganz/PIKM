@@ -1,11 +1,11 @@
 // ============================================================
 // UEST MLBB CUP 4# - Background Music Player
 // ============================================================
-// - Musik mulai saat user scroll / klik / sentuh halaman
+// - Musik mulai ketika user mulai berinteraksi / menggeser
+// - Cocok untuk Desktop + HP
 // - Playlist berurutan + loop
-// - Posisi lagu tersimpan di localStorage
-// - Bisa melanjutkan posisi lagu saat halaman dibuka kembali
-// - Tampilan: disc berputar + judul lagu
+// - Posisi lagu tersimpan
+// - Disc berputar ketika musik aktif
 // ============================================================
 
 (function () {
@@ -25,12 +25,12 @@
             artist: 'Track I'
         }
 
-        // Tambahkan lagu berikutnya di sini jika diperlukan:
-
+        // Tambahkan lagu berikutnya seperti ini:
+        //
         // ,
         // {
         //     src: 'assets/music/2.mp3',
-        //     title: "Track II",
+        //     title: 'Track II',
         //     artist: 'UEST MLBB CUP 4'
         // }
 
@@ -57,6 +57,19 @@
 
     var started = false;
 
+    var interactionEvents = [
+
+        // HP
+        'touchstart',
+        'pointerdown',
+
+        // Desktop
+        'click',
+        'wheel',
+        'keydown'
+
+    ];
+
 
     // ========================================================
     // GET SAVED STATE
@@ -76,7 +89,6 @@
                 typeof data.ti === 'number'
             ) {
 
-                // Jika index lagu sudah tidak tersedia
                 if (
                     data.ti >= PLAYLIST.length
                 ) {
@@ -90,16 +102,15 @@
 
             }
 
-        } catch (e) {
+        } catch (error) {
 
             console.log(
-                'Tidak bisa membaca music state'
+                'Music state tidak dapat dibaca.'
             );
 
         }
 
 
-        // Default
         return {
             ti: 0,
             ct: 0
@@ -129,10 +140,10 @@
                 })
             );
 
-        } catch (e) {
+        } catch (error) {
 
             console.log(
-                'Tidak bisa menyimpan music state'
+                'Music state tidak dapat disimpan.'
             );
 
         }
@@ -157,14 +168,11 @@
         'DOMContentLoaded',
         function () {
 
-            // Buat UI music
             buildUI();
 
-            // Siapkan audio
             setupAudio();
 
-            // Tunggu interaksi user
-            waitForInteraction();
+            setupInteraction();
 
         }
     );
@@ -181,15 +189,13 @@
         );
 
 
-        // Lebih cocok untuk HP
+        // Penting untuk HP
         audio.preload = 'auto';
 
-
-        // Volume
         audio.volume = VOLUME;
 
 
-        // Mobile Safari / iOS
+        // Mobile Safari / iPhone
         audio.setAttribute(
             'playsinline',
             ''
@@ -201,7 +207,6 @@
         );
 
 
-        // Tambahkan audio ke body
         document.body.appendChild(
             audio
         );
@@ -215,54 +220,34 @@
             'ended',
             function () {
 
-                // Pindah ke lagu berikutnya
                 trackIndex =
                     (
                         trackIndex + 1
                     ) % PLAYLIST.length;
 
 
-                // Load dan play lagu berikutnya
                 loadTrack(
-                    0,
-                    true
+                    0
                 );
+
+
+                playMusic();
 
             }
         );
 
 
         // ====================================================
-        // AUDIO ERROR
+        // ERROR
         // ====================================================
 
         audio.addEventListener(
             'error',
             function () {
 
-                console.log(
-                    'Music error:',
+                console.error(
+                    '❌ Music Error:',
                     audio.error
-                );
-
-
-                // Coba lagu berikutnya
-                trackIndex =
-                    (
-                        trackIndex + 1
-                    ) % PLAYLIST.length;
-
-
-                setTimeout(
-                    function () {
-
-                        loadTrack(
-                            0,
-                            true
-                        );
-
-                    },
-                    500
                 );
 
             }
@@ -270,7 +255,7 @@
 
 
         // ====================================================
-        // SAVE POSITION
+        // SAVE POSISI
         // ====================================================
 
         setInterval(
@@ -290,14 +275,14 @@
         );
 
 
-        // Simpan ketika halaman ditutup
+        // Simpan ketika browser meninggalkan halaman
         window.addEventListener(
             'beforeunload',
             save
         );
 
 
-        // Simpan ketika page di-hide
+        // Simpan ketika tab disembunyikan
         document.addEventListener(
             'visibilitychange',
             function () {
@@ -315,13 +300,9 @@
         );
 
 
-        // ====================================================
-        // LOAD TRACK PERTAMA
-        // ====================================================
-
+        // Load lagu
         loadTrack(
-            saved.ct,
-            false
+            saved.ct
         );
 
     }
@@ -332,8 +313,7 @@
     // ========================================================
 
     function loadTrack(
-        seekTo,
-        autoPlay
+        seekTo
     ) {
 
         if (!audio) return;
@@ -343,22 +323,16 @@
             PLAYLIST[trackIndex];
 
 
-        // Set sumber lagu
         audio.src = track.src;
 
-
-        // Load audio
         audio.load();
 
 
-        // Update judul
+        // Update nama lagu
         updateInfo();
 
 
-        // ====================================================
-        // Tunggu metadata
-        // ====================================================
-
+        // Restore posisi
         audio.addEventListener(
             'loadedmetadata',
             function onMetadata() {
@@ -368,10 +342,6 @@
                     onMetadata
                 );
 
-
-                // ==================================================
-                // Kembalikan posisi lagu
-                // ==================================================
 
                 if (
                     seekTo > 0 &&
@@ -384,24 +354,13 @@
                         audio.currentTime =
                             seekTo;
 
-                    } catch (e) {
+                    } catch (error) {
 
                         console.log(
-                            'Tidak bisa restore posisi lagu'
+                            'Gagal restore posisi musik.'
                         );
 
                     }
-
-                }
-
-
-                // ==================================================
-                // Auto play
-                // ==================================================
-
-                if (autoPlay) {
-
-                    playMusic();
 
                 }
 
@@ -420,60 +379,54 @@
         if (!audio) return;
 
 
-        var promise =
-            audio.play();
+        // Jangan play ulang kalau sudah berjalan
+        if (!audio.paused) {
 
-
-        // Browser modern mengembalikan Promise
-        if (
-            promise !== undefined
-        ) {
-
-            promise
-                .then(
-                    function () {
-
-                        // Musik berhasil dimainkan
-                        started = true;
-
-
-                        // Animasi disc
-                        setPlaying(
-                            true
-                        );
-
-
-                        console.log(
-                            '🎵 Music playing'
-                        );
-
-                    }
-                )
-                .catch(
-                    function (error) {
-
-                        // Autoplay diblokir browser
-                        setPlaying(
-                            false
-                        );
-
-
-                        console.log(
-                            'Autoplay blocked:',
-                            error
-                        );
-
-                    }
-                );
-
-        } else {
-
-            // Browser lama
             started = true;
 
-            setPlaying(
-                true
-            );
+            setPlaying(true);
+
+            return;
+
+        }
+
+
+        var promise = audio.play();
+
+
+        if (promise !== undefined) {
+
+            promise
+                .then(function () {
+
+                    started = true;
+
+                    setPlaying(true);
+
+                    removeInteractionListeners();
+
+
+                    console.log(
+                        '🎵 Music playing'
+                    );
+
+                })
+                .catch(function (error) {
+
+                    // JANGAN set started = true
+                    // supaya masih bisa mencoba lagi
+
+                    started = false;
+
+                    setPlaying(false);
+
+
+                    console.log(
+                        '⚠️ Music belum bisa dimainkan:',
+                        error
+                    );
+
+                });
 
         }
 
@@ -481,93 +434,56 @@
 
 
     // ========================================================
-    // WAIT FOR USER INTERACTION
+    // USER INTERACTION
     // ========================================================
 
-    function waitForInteraction() {
+    function setupInteraction() {
 
-        var events = [
-
-            // Desktop
-            'click',
-            'mousemove',
-            'keydown',
-            'wheel',
-            'scroll',
-
-            // Mobile
-            'touchstart',
-            'touchend',
-            'pointerdown'
-
-        ];
-
-
-        function onInteract() {
-
-
-            // Jika sudah mulai
-            if (started) {
-
-                return;
-
-            }
-
-
-            // ==================================================
-            // Hapus semua listener
-            // ==================================================
-
-            events.forEach(
-                function (event) {
-
-                    document.removeEventListener(
-                        event,
-                        onInteract,
-                        true
-                    );
-
-
-                    window.removeEventListener(
-                        event,
-                        onInteract,
-                        true
-                    );
-
-                }
-            );
-
-
-            // ==================================================
-            // Play
-            // ==================================================
-
-            if (audio) {
-
-                playMusic();
-
-            }
-
-        }
-
-
-        // ======================================================
-        // Pasang listener
-        // ======================================================
-
-        events.forEach(
+        interactionEvents.forEach(
             function (event) {
 
                 document.addEventListener(
                     event,
-                    onInteract,
-                    true
+                    handleInteraction,
+                    {
+                        capture: true,
+                        passive: true
+                    }
                 );
 
+            }
+        );
 
-                window.addEventListener(
+    }
+
+
+    // ========================================================
+    // HANDLE INTERACTION
+    // ========================================================
+
+    function handleInteraction() {
+
+        if (started) return;
+
+
+        // Langsung coba play
+        playMusic();
+
+    }
+
+
+    // ========================================================
+    // REMOVE LISTENERS
+    // ========================================================
+
+    function removeInteractionListeners() {
+
+        interactionEvents.forEach(
+            function (event) {
+
+                document.removeEventListener(
                     event,
-                    onInteract,
+                    handleInteraction,
                     true
                 );
 
@@ -578,7 +494,7 @@
 
 
     // ========================================================
-    // SET PLAYING STATUS
+    // MUSIC STATUS
     // ========================================================
 
     function setPlaying(
@@ -598,7 +514,7 @@
 
 
         // ====================================================
-        // Disc
+        // DISC
         // ====================================================
 
         if (disc) {
@@ -621,7 +537,7 @@
 
 
         // ====================================================
-        // Notification
+        // NOTIFICATION
         // ====================================================
 
         if (notif) {
@@ -709,10 +625,6 @@
 
             '<div class="music-notif-inner">' +
 
-                // ==============================
-                // DISC
-                // ==============================
-
                 '<div class="music-disc-wrapper">' +
 
                     '<div class="music-disc paused" id="musicDisc">' +
@@ -727,10 +639,6 @@
 
                 '</div>' +
 
-
-                // ==============================
-                // MUSIC INFO
-                // ==============================
 
                 '<div class="music-info">' +
 
@@ -752,11 +660,11 @@
             '</div>';
 
 
-        // Masukkan UI ke body
         document.body.appendChild(
             notif
         );
 
     }
+
 
 })();
